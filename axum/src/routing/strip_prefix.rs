@@ -149,11 +149,8 @@ where
 }
 
 fn prefix_matches(prefix_segment: &str, path_segment: &str) -> bool {
-    if let Some((prefix, suffix)) = capture_prefix_suffix(prefix_segment) {
-        path_segment.starts_with(prefix) && path_segment.ends_with(suffix)
-    } else {
-        prefix_segment == path_segment
-    }
+    prefix_segment == path_segment
+        || (prefix_segment.starts_with('{') && prefix_segment.ends_with('}'))
 }
 
 /// Takes a segment and returns prefix and suffix of the path, omitting the capture. Currently,
