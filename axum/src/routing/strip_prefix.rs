@@ -69,7 +69,13 @@ fn strip_prefix(uri: &Uri, prefix: &str) -> Option<Uri> {
                 if prefix_matches(prefix_segment, path_segment) {
                     // the prefix segment is either a param, which matches anything, or
                     // it actually matches the path segment
-                    *matching_prefix_length.as_mut().unwrap() += path_segment.len();
+                    if capture_prefix_suffix(prefix_segment).is_some() {
+                        // capture segment: advance past the captured value
+                        *matching_prefix_length.as_mut().unwrap() +=
+                            path_segment.len().saturating_sub(1);
+                    } else {
+                        *matching_prefix_length.as_mut().unwrap() += path_segment.len();
+                    }
                 } else if prefix_segment.is_empty() {
                     // the prefix ended in a `/` so we got a match.
                     //
