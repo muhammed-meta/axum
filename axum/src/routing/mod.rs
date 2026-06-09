@@ -398,26 +398,6 @@ where
         tap_inner!(self, mut this => {
             _ = this.path_router.route_endpoint(
                 "/",
-                endpoint.clone().layer(
-                    layer_fn(
-                        |service: Route| {
-                            let mut service = Some(service);
-                            service_fn(
-                                #[cfg_attr(not(feature = "matched-path"), allow(unused_mut))]
-                                move |mut request: Request| {
-                                    #[cfg(feature = "matched-path")]
-                                    request.extensions_mut().remove::<MatchedPath>();
-                                    let route = take_route_or_internal_error(&mut service);
-                                    route.oneshot_inner_owned(request)
-                                }
-                            )
-                        }
-                    )
-                )
-            );
-
-            _ = this.path_router.route_endpoint(
-                FALLBACK_PARAM_PATH,
                 endpoint.layer(
                     layer_fn(
                         |service: Route| {
