@@ -39,11 +39,8 @@ use tower_http::{
 };
 use tower_service::Service;
 
-mod fallback;
 mod get_to_head;
 mod handle_error;
-mod merge;
-mod nest;
 
 #[cfg(all(feature = "tokio", debug_assertions))]
 #[test]
